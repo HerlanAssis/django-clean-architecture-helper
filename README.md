@@ -18,7 +18,7 @@ Vantagens na utilização desta aplicação:
 ### Configuração
 1. Adicione a dependência no seu arquivo requirements.txt:
 ```text
-git+git://github.com/<user>/<app>.git@<branch>#egg=<tag_name>
+git+git://github.com/herlanassis/django-clean-architecture-helper.git@master#egg=v0.1
 ```
 1. Instale as dependências:
 ```shell script
