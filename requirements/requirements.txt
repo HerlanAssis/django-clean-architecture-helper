@@ -1,2 +1,4 @@
 graphene==2.1.8
+graphene-django==2.5.0
 djangorestframework==3.10.0
+python-memcached==1.59
