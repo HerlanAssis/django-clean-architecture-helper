@@ -8,7 +8,7 @@
 ![GitHub issues](https://img.shields.io/github/issues-raw/herlanassis/django-clean-architecture-helper?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/herlanassis?style=social)
 
-Django Clean Architecture Helper é uma `aplicação` que permite que os `desenvolvedores Django` criar `aplicações escaláveis`.
+Django Clean Architecture Helper é uma `aplicação` que permite que os `desenvolvedores Django` criem `aplicações escaláveis`.
 
 Motivação para a construção do aplicativo:
 * [The clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
