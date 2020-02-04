@@ -1,6 +1,14 @@
-# Arquitetura limpa em Django
-Este aplicativo tem o propósito de ajudar no processo de
-construção de um projeto no Django Framework ao fornecer um template para as aplicações.
+# Django Clean Architecture Helper
+
+<!--- Alguns exemplos. Veja https://shields.io para outros escudos customizavéis. Convém incluir dependências, status do projeto e informações da licença aqui --->
+![GitHub repo size](https://img.shields.io/github/repo-size/herlanassis/django-clean-architecture-helper)
+![GitHub contributors](https://img.shields.io/github/contributors/herlanassis/django-clean-architecture-helper)
+![GitHub stars](https://img.shields.io/github/stars/herlanassis/django-clean-architecture-helper?style=social)
+![GitHub forks](https://img.shields.io/github/forks/herlanassis/django-clean-architecture-helper?style=social)
+![GitHub issues](https://img.shields.io/github/issues-raw/herlanassis/django-clean-architecture-helper?style=social)
+![Twitter Follow](https://img.shields.io/twitter/follow/herlanassis?style=social)
+
+Django Clean Architecture Helper é uma `aplicação` que permite que os `desenvolvedores Django` criar `aplicações escaláveis`.
 
 Motivação para a construção do aplicativo:
 * [The clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
@@ -14,8 +22,19 @@ Vantagens na utilização desta aplicação:
 * Baixo acoplamento e alta coesão de cada camada;
 * CRUD simples já implementado;
 
+## Pré-requisitos
 
-### Configuração
+Antes de começar, verifique se você atendeu aos seguintes requisitos:
+<!--- Estes são apenas exemplos de requisitos. Adicione, duplique ou remova conforme necessário --->
+* Você instalou o `python 3`?;
+* Você instalou uma compatível do `virtualenv`?;
+* Você instalou a compatível do `virtualenvwrapper`?;
+* Você instalou o `Django 2.x`?;
+
+## Instalando Django Clean Architecture Helper
+
+Para instalar o Django Clean Architecture Helper, siga estes passos:
+
 1. Adicione a dependência no seu arquivo requirements.txt:
 ```text
 git+git://github.com/herlanassis/django-clean-architecture-helper.git@master#egg=v0.2
@@ -24,7 +43,11 @@ git+git://github.com/herlanassis/django-clean-architecture-helper.git@master#egg
 ```shell script
 pip install -r requirements.txt
 ```
-1. Instale a aplicação no seu projeto:
+
+## Utilizando Django Clean Architecture Helper
+
+Para usar o Django Clean Architecture Helper, siga estes passos:
+
 ```python
 INSTALLED_APPS = [
    ...
@@ -417,9 +440,29 @@ class Mutation(graphene.ObjectType):
     delete_post = DeletePostMutation.Field()
 ```
 Pronto! Tudo feito por aqui, agora você deve ser capaz de criar, editar e deletar um `Post`.
-### Considerações
-Parabéns por ter chegado aqui! Mas não pare ainda, recomendo que você leia o código escrito nesta aplicação.
 
-PS: Sinta-se livre para enviar suas correções, melhorias ou comentários.
+## Contribuindo para Django Clean Architecture Helper
 
-Obrigado!
+Para contribuir com Django Clean Architecture Helper, siga estes passos:
+
+1. Fork esse repositório.
+2. Crie uma branch: `git checkout -b <branch_name>`.
+3. Faça suas mudanças e comite para: `git commit -m '<commit_message>'`
+4. Push para a branch de origem: `git push origin Django Clean Architecture Helper/<location>`
+5. crie um pull request.
+
+Como alternativa, consulte a documentação do GitHub em [criando uma pull request](https://help.github.com/pt/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+## Contribuidores
+
+Agradeço às seguintes pessoas que contribuíram para este projeto:
+
+* [@herlanassis](https://github.com/herlanassis)
+
+## Contato
+
+Se você quiser entrar em contato comigo, entre em contato com herlanassis@gmail.com.
+
+## License
+<!--- Se você não tiver certeza de qual licença aberta usar, consulte https://choosealicense.com --->
+Este projeto usa a seguinte licença: [Apache 2.0](https://spdx.org/licenses/Apache-2.0.html).
