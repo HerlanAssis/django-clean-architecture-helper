@@ -22,8 +22,8 @@ class BaseRepo:
 
         return obj
 
-    def all(self, force_all, **kwargs):
-        return self._database.all(force_all=force_all, **kwargs)
+    def filter(self,**kwargs):
+        return self._database.filter(**kwargs)
 
     def update(self, **kwargs):
         return self._database.update(**kwargs)

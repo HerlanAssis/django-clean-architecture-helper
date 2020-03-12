@@ -13,7 +13,6 @@ Django Clean Architecture Helper é uma `aplicação` que permite que os `desenv
 Motivação para a construção do aplicativo:
 * [The clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 * [Django clean architecture](http://jordifierro.com/django-clean-architecture)
-* [Graphql on Django at JOOR](https://medium.com/joor-engineering/graphql-on-django-at-joor-f31dc3251482)
 
 Obs: Para o melhor entendimento desse projeto, recomendo fortemente a leitura dos artigos acima.
 
@@ -37,7 +36,7 @@ Para instalar o Django Clean Architecture Helper, siga estes passos:
 
 1. Adicione a dependência no seu arquivo requirements.txt:
 ```text
-git+git://github.com/herlanassis/django-clean-architecture-helper.git@master#egg=v0.2
+git+git://github.com/herlanassis/django-clean-architecture-helper.git@master#egg=v0.3
 ```
 1. Instale as dependências:
 ```shell script
@@ -163,7 +162,7 @@ class UpdatePostInteractor(BaseUpdateInteractor):
     pass
 
 
-class AllPostsInteractor(BaseAllInteractor):
+class FilterPostsInteractor(BaseFilterInteractor):
     pass
 
 
@@ -208,7 +207,7 @@ uma fábríca de dependências e injetar nas instâncias que desejar obter.
 from .repositories import PostEntityRepo
 from .databases import PostDatabaseRepo
 from .caches import PostCacheRepo
-from .interactors import GetPostInteractor, CreatePostInteractor, UpdatePostInteractor, AllPostsInteractor, DeletePostsInteractor
+from .interactors import GetPostInteractor, CreatePostInteractor, UpdatePostInteractor, FilterPostsInteractor, DeletePostsInteractor
 from .presentation import PostPresentation
 
 # Repositories
@@ -268,12 +267,12 @@ class DeletePostInteractorFactory:
         return DeletePostsInteractor(post_repo)
 
 
-class AllPostsInteractorFactory:
+class FilterPostsInteractorFactory:
 
     @staticmethod
     def get():
         post_repo = PostEntityRepoFactory.get()
-        return AllPostsInteractor(post_repo)
+        return FilterPostsInteractor(post_repo)
 
 # Presentations
 class PostPresentationFactory:
@@ -284,14 +283,14 @@ class PostPresentationFactory:
         get_post_interactor = GetPostInteractorFactory.get()
         update_post_interactor = UpdatePostInteractorFactory.get()
         delete_post_interactor = DeletePostInteractorFactory.get()
-        all_posts_interactor = AllPostsInteractorFactory.get()
+        filter_posts_interactor = FilterPostsInteractorFactory.get()
 
         operations = {
             'create': create_post_interactor,
             'get': get_post_interactor,
             'update': update_post_interactor,
             'delete': delete_post_interactor,
-            'all': all_posts_interactor,
+            'filter': filter_posts_interactor,
         }
 
         return PostPresentation(operations=operations)
@@ -304,142 +303,16 @@ para exemplificar isso, vamos continuar o processo utilizando o `graphql` como a
 camada de iteração entre as requisições e a nossa apresentação. Vale lembrar que
 também é possível utilizar `endpoints rest` para isso.
 
-### 9º Passo: Implementação do Graphql (Opcional)
-Neste passo, vamos implementar as seguintes operações, GET, CREATE, UPDATE, ALL e DELETE.
+### 9º Passo: Exemplo com Graphql (Opcional)
+* (https://github.com/HerlanAssis/django-clean-architecture-helper-gql-extension)[https://github.com/HerlanAssis/django-clean-architecture-helper-gql-extension]
 
-Para continuar é necessário realizar a configuração de um `endpoint graphql`,
-você pode fazer isso através deste tutorial
-[Graphene Introdution](https://docs.graphene-python.org/en/latest/quickstart/#introduction).
+## TODO
 
-Neste ponto suponho que você tenha o `graphql` configurado.
+As próximas ações para o projeto são:
 
-#### GET
-A primeira operação é uma ação simples para recuperar um `post`, crie um arquivo chamado `types.py`
-e define um objeto `post`.
-```python
-import graphene
-from django_clean_architecture_helper.graphql.types import BaseType
-from ..factories import PostPresentationFactory
-from .filters import PostFilter
-
-
-class PostType(BaseType):
-    title = graphene.String()
-    content = graphene.String()
-
-    class Meta:
-        view_factory = PostPresentationFactory
-        interfaces = (graphene.relay.Node, )
-        filter_class = PostFilter
-
-```
-Como pode ser observado acima, o `PostType` recebe em sua `classe Meta` os atributos `view_factory` e `filter_class`.
-O `view_factory`é a camada que conecta uma `presentation` com a uma `view`, neste caso com o `graphql`.
-O `filter_class` é responsável por gerar atributos que serão
-utilizados na query `all` como parametro de filtro no modelo do banco. A seguir um exemplo de um `filter_class`:
-
-```python
-import graphene
-from django_clean_architecture_helper.graphql.filters import BaseFilter
-
-
-class PostFilter(BaseFilter):
-    def __init__(self):
-        super().__init__()
-        self.title__iexact = graphene.String()
-        self.title__icontains = graphene.String()
-```
-Para criar o filtro basta criar um atributo de classe com o nome do atributo de modelo a ser filtrado com o
-sufixo desejado, alguns do sufixos que podem ser utilizados são:
-* <field_name>__iexact
-* <field_name__exact
-* <field_name__icontains
-* <field_name__contains
-
-Para saber mais acesse:
-* [Django docs: Queries](https://docs.djangoproject.com/en/2.2/topics/db/queries/)
-* [Django docs: Querysets](https://docs.djangoproject.com/en/2.2/ref/models/querysets/)
-
-#### ALL
-Antes de implementar o `resolve_all` é necessário criar uma `connection` com o `PostType`, exemplo:
-```python
-from from django_clean_architecture_helper.graphql.connections import TotalItemsConnection
-from .types import PostType
-
-
-class PostConnection(TotalItemsConnection):
-    class Meta:
-        node = PostType
-
-```
-Depois disso basta adicionar o seguinte código no arquivo `query.py`:
-```python
-import graphene
-from django_clean_architecture_helper.graphql.connections import BaseConnectionField
-from .types import PostType
-from .connections import PostConnection
-from ..factories import PostPresentationFactory
-
-
-class Query(graphene.ObjectType):
-    get_post = graphene.relay.Node.Field(PostType)
-    all_posts = BaseConnectionField(PostConnection)
-
-    def resolve_all_posts(self, info, **kwargs):
-        body, status, errors = PostPresentationFactory.create().all(**kwargs)
-        return body
-```
-Tudo certo! Agora você tem os métods de recuperar, listar e filtrar, _simple and easy_!
-
-#### CREATE & UPDATE
-Insira o código abaixo no arquivo de `mutation.py` e você vai ter os métodos de criar e atualizar.
-```python
-import graphene
-from django_clean_architecture_helper.mutations import CreateOrUpdateMutation, DeleteMutation
-from .types import PostType
-from ..factories import PostPresentationFactory
-
-
-class PostMutation(CreateOrUpdateMutation):
-    class Meta:
-        lookup_field = 'id'
-        view_factory = PostPresentationFactory
-        operations = ['create', 'update']
-        response_name = 'post'
-
-    class Input:
-        # The input arguments for this mutation
-        id = graphene.ID()
-        title = graphene.String(required=True)
-        content = graphene.String(required=False)
-
-    # The class attributes define the response of the mutation
-    post = graphene.Field(PostType)
-```
-#### DELETE
-Ainda no arquivo `mutation.py` adicione o código:
-```python
-...
-
-class DeletePostMutation(DeleteMutation):
-    class Meta:
-        lookup_field = 'id'
-        view_factory = PostPresentationFactory
-
-    class Input:
-        # The input arguments for this mutation
-        id = graphene.ID()
-```
-Depois disso basta adicionar o seguinte código no arquivo `mutation.py`:
-```python
-...
-
-class Mutation(graphene.ObjectType):
-    create_post = PostMutation.Field()
-    update_post = PostMutation.Field()
-    delete_post = DeletePostMutation.Field()
-```
-Pronto! Tudo feito por aqui, agora você deve ser capaz de criar, editar e deletar um `Post`.
+* [x] ~~Escrever README~~
+* [ ] Escrever Documentação
+* [ ] Escrever Testes
 
 ## Contribuindo para Django Clean Architecture Helper
 

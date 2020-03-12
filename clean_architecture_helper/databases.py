@@ -40,14 +40,13 @@ class BaseDatabase:
     def get(self, **kwargs):
         return self._decode_db(self._get(**kwargs))
 
-    def _all(self, force_all=False, **kwargs):
-        if force_all:
+    def _filter(self, **kwargs):
+        if kwargs.pop('force_all', False):        
             return self._orm.objects.all()
-
         return self._orm.objects.actives()
 
-    def all(self, force_all, **kwargs):
-        orm_instance = self._all(force_all, **kwargs)
+    def filter(self, **kwargs):
+        orm_instance = self._filter(**kwargs)
 
         if kwargs:
             filter = Q()

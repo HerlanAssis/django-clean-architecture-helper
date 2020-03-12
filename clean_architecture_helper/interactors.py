@@ -35,17 +35,16 @@ class BaseUpdateInteractor:
         return self.repo.update(**self.kwargs)
 
 
-class BaseAllInteractor:
+class BaseFilterInteractor:
     def __init__(self, repo):
         self.repo = repo
 
-    def set_params(self, force_all, **kwargs):
-        self.force_all = force_all
+    def set_params(self, **kwargs):        
         self.kwargs = kwargs
         return self
 
     def execute(self):
-        return self.repo.all(force_all=self.force_all, **self.kwargs)
+        return self.repo.all(**self.kwargs)
 
 
 class BaseDeleteInteractor:

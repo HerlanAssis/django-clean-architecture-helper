@@ -9,13 +9,13 @@ class BasePresentation:
         get = operations.get('get')
         update = operations.get('update')
         delete = operations.get('delete')
-        all = operations.get('all')
+        filter = operations.get('filter')
 
         self._create = create
         self._get = get
         self._update = update
         self._delete = delete
-        self._all = all
+        self._filter = filter
 
         self._serializer = serializer
 
@@ -96,14 +96,14 @@ class BasePresentation:
 
         return body, status, errors
 
-    def all(self, force_all=False, **kwargs):
+    def filter(self, **kwargs):
         body = {}
         status = 200
         errors = []
 
         try:
-            obj = self._all \
-                .set_params(force_all=force_all, **kwargs) \
+            obj = self._filter \
+                .set_params(**kwargs) \
                 .execute()
         except Exception:
             errors.append(_("Ocorreu um erro ao obter os resultados"))
