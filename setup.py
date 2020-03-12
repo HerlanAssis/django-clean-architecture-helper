@@ -35,7 +35,7 @@ def create_mo_files():
 
 setup(
     name='django-clean-architecture-helper',
-    version='0.1',
+    version='0.3',
     license='BSD License',  # example license
     description='Django Clean Architecture Helper',
     long_description=README,

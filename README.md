@@ -28,7 +28,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 * Você instalou o `python 3`?;
 * Você instalou uma compatível do `virtualenv`?;
 * Você instalou a compatível do `virtualenvwrapper`?;
-* Você instalou o `Django 2.x`?;
+* Você instalou o `Django 3.x`?;
 
 ## Instalando Django Clean Architecture Helper
 
@@ -304,7 +304,7 @@ camada de iteração entre as requisições e a nossa apresentação. Vale lembr
 também é possível utilizar `endpoints rest` para isso.
 
 ### 9º Passo: Exemplo com Graphql (Opcional)
-* (https://github.com/HerlanAssis/django-clean-architecture-helper-gql-extension)[https://github.com/HerlanAssis/django-clean-architecture-helper-gql-extension]
+* [https://github.com/HerlanAssis/django-clean-architecture-helper-gql-extension](https://github.com/HerlanAssis/django-clean-architecture-helper-gql-extension)
 
 ## TODO
 
